@@ -1,46 +1,68 @@
 package com.example.Orion.service;
 
+import com.example.Orion.dto.ProductDto;
+import com.example.Orion.dto.mapper.ProductMapper;
 import com.example.Orion.model.Product;
 import com.example.Orion.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class ProductService {
+
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository) {
+    // Injeção de dependências via construtor
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
-    public List<Product> getProductAll() {
-        return productRepository.findAll();
+    // 🔹 Retorna todos os produtos (Entity → DTO)
+    public List<ProductDto> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
-    public Product getAllByid(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    // 🔹 Busca um produto por ID (Entity → DTO)
+    public ProductDto getProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product Not Found"));
+        return productMapper.toDto(product);
     }
 
-    public Product CreateProduct(Product product) {
-        return productRepository.save(product);
+    // 🔹 Cria um novo produto (DTO → Entity)
+    public ProductDto createProduct(ProductDto productDto) {
+        Product product = productMapper.toEntity(productDto);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDto(savedProduct);
     }
 
-    public Product update(Long id, Product productdetails) {
-        Product product = getAllByid(id);
-        product.setId(productdetails.getId());
-        product.setName(productdetails.getName());
-        product.setStock(productdetails.getStock());
-        product.setPrice(productdetails.getPrice());
-        product.setDescription(productdetails.getDescription());
-        return productRepository.save(product);
+    // 🔹 Atualiza um produto existente (DTO → Entity → DTO)
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product Not Found "));
+
+        // Copia os dados do DTO para a entidade existente
+        existingProduct.setName(productDto.getName());
+        existingProduct.setDescription(productDto.getDescription());
+        existingProduct.setPrice(productDto.getPrice());
+        existingProduct.setStock(productDto.getStock());
+
+        Product updatedProduct = productRepository.save(existingProduct);
+        return productMapper.toDto(updatedProduct);
     }
-    public void delete(Long id) {
-        Product product=getAllByid(id);
-        productRepository.delete(product);
+
+    // 🔹 Deleta um produto
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new RuntimeException("Product Not Found");
+        }
+        productRepository.deleteById(id);
     }
-
-
-
 }
+
+

@@ -18,5 +18,7 @@ public class Customer {
     private String nome;
     private String email;
     private String phone;
+    private String Password;
+
 }
 

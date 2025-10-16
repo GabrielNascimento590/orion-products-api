@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "tb_order")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -26,6 +26,6 @@ public class Order {
     private String Status;
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "Order" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 }
