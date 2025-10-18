@@ -18,7 +18,7 @@ public class CustomerService {
         this.customerMapper=customerMapper;
     }
 
-    public List<CustomerDto> getall() {
+    public List<CustomerDto> getAllCustomers() {
         return customerRepository.findAll()
                 .stream()
                 .map(customerMapper::toDto)
