@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
+
     public Product toEntity(ProductDto dto) {
-        Product product= new Product();
-        BeanUtils.copyProperties(this, product);
+        Product product = new Product();
+        BeanUtils.copyProperties(dto, product);
         return product;
     }
 
@@ -18,5 +19,4 @@ public class ProductMapper {
         BeanUtils.copyProperties(product, dto);
         return dto;
     }
-
 }
