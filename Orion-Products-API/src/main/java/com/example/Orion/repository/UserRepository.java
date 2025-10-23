@@ -1,12 +1,14 @@
 package com.example.Orion.repository;
 
-import com.example.Orion.model.Customer;
+import com.example.Orion.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    Optional<Customer> findByEmail(String email);
+public interface UserRepository extends JpaRepository<User, Long> {
+        Optional<User> findByUsername(String username);
 }
+
+

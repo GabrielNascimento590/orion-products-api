@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class OrderMapper {
     public Order toEntity(OrderDto dto) {
         Order order= new Order();
-        BeanUtils.copyProperties(this , order);
+        BeanUtils.copyProperties(dto , order);
         return order;
     }
 

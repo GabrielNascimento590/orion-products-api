@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class CustomerMapper {
     public Customer toEntity (CustomerDto dto) {
         Customer customer = new Customer();
-        BeanUtils.copyProperties(this,customer);
+        BeanUtils.copyProperties(dto,customer);
         return customer;
     }
 
